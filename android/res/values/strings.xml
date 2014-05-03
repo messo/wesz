@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wellness</string>
+    <string name="settings">Beállítások</string>
+    <string name="btn_qr_code">QR kód</string>
+    <string name="server_url">Szerver URL</string>
+    <string name="btn_save">Mentés</string>
+    <string name="btn_default">Alapértelmezett</string>
+    <string name="qr_help">Irányítsd a kamerát egy QR kód felé!</string>
+    
+</resources>

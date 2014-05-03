@@ -1,0 +1,22 @@
+.affordable {
+	color: #99cc00;
+}
+
+.success {
+	font-weight: bold;
+	color: #99cc00;
+}
+
+.failure {
+	font-weight: bold;
+	color: #ff4444;
+}
+
+.holo-action-bar h1 img {
+	vertical-align: middle;
+	border: 0;
+	margin-left: 10px;
+}
+.holo-action-bar .holo-up img {
+	margin-left: 0;
+}

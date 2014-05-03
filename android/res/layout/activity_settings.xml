@@ -1,0 +1,95 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.magicconsulting.wesz.MainActivity"
+    tools:ignore="MergeRootFrame">
+    
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+   		android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:layout_margin="10dp"
+        android:gravity="left"
+        android:textColor="#ffffff"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:text="@string/server_url"
+        />
+    
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+   		android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:layout_margin="10dp"
+        android:gravity="left"
+        android:textColor="#aaaaaa"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/et_server"
+        />
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        >
+        
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            >
+            
+    		<Button
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:layout_centerInParent="true"
+        		android:textColor="#ffffff"
+        		android:textSize="20sp"
+        		android:textStyle="bold"
+        		android:paddingTop="10dp"
+        		android:paddingBottom="10dp"
+        		android:paddingLeft="20dp"
+        		android:paddingRight="20dp"
+        		android:layout_margin="10dp"
+        		android:text="@string/btn_save"
+        		android:id="@+id/btn_save"
+        	/>
+    
+        </RelativeLayout>
+        
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            >
+    		
+    		<Button
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:layout_centerInParent="true"
+        		android:textColor="#ffffff"
+        		android:textSize="20sp"
+        		android:textStyle="bold"
+        		android:paddingTop="10dp"
+        		android:paddingBottom="10dp"
+        		android:paddingLeft="20dp"
+        		android:paddingRight="20dp"
+        		android:layout_margin="10dp"
+        		android:text="@string/btn_default"
+        		android:id="@+id/btn_default"
+        	/>
+            
+        </RelativeLayout>
+        
+    </LinearLayout>
+    
+</LinearLayout>
