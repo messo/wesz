@@ -4,72 +4,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.magicconsulting.wesz.MainActivity"
-    tools:ignore="MergeRootFrame">
-    
-    
+    tools:ignore="MergeRootFrame" >
+
     <WebView
+        android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/webview"
-        />
-    
-    <LinearLayout 
-        android:layout_width="match_parent"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btn_qr"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        >
-        
-        <RelativeLayout
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            >
-            
-    		<Button
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:layout_centerInParent="true"
-        		android:textColor="#ffffff"
-        		android:textSize="20sp"
-        		android:textStyle="bold"
-        		android:paddingTop="10dp"
-        		android:paddingBottom="10dp"
-        		android:paddingLeft="20dp"
-        		android:paddingRight="20dp"
-        		android:layout_margin="10dp"
-        		android:text="@string/btn_qr_code"
-        		android:id="@+id/btn_qr"
-        	/>
-    
-        </RelativeLayout>
-        
-        <RelativeLayout
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            >
-    		
-    		<Button
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:layout_centerInParent="true"
-        		android:textColor="#ffffff"
-        		android:textSize="20sp"
-        		android:textStyle="bold"
-        		android:paddingTop="10dp"
-        		android:paddingBottom="10dp"
-        		android:paddingLeft="20dp"
-        		android:paddingRight="20dp"
-        		android:layout_margin="10dp"
-        		android:text="@string/settings"
-        		android:id="@+id/btn_settings"
-        	/>
-            
-        </RelativeLayout>
-        
-    </LinearLayout>
-    
-    
+        android:layout_margin="10dp"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:text="@string/btn_qr_code"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
 </LinearLayout>

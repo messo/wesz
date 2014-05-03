@@ -19,11 +19,7 @@ import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 public class QrActivity extends Activity
 {
@@ -40,6 +36,8 @@ public class QrActivity extends Activity
     
     public static final int RESULT_SCAN_SUCCESSFUL = 99;
     public static final String EXTRA_SCANNED_CODE = "extra_qr_code";
+    
+    private static final String settingsCode = "settings";
     
     static {
         System.loadLibrary("iconv");
@@ -102,63 +100,88 @@ public class QrActivity extends Activity
             }
         };
 
-    PreviewCallback previewCb = new PreviewCallback() {
-            public void onPreviewFrame(byte[] data, Camera camera) {
-                Camera.Parameters parameters = camera.getParameters();
-                Size size = parameters.getPreviewSize();
+	PreviewCallback previewCb = new PreviewCallback() {
+		public void onPreviewFrame(byte[] data, Camera camera) {
+			Camera.Parameters parameters = camera.getParameters();
+			Size size = parameters.getPreviewSize();
 
-                Image barcode = new Image(size.width, size.height, "Y800");
-                barcode.setData(data);
+			Image barcode = new Image(size.width, size.height, "Y800");
+			barcode.setData(data);
 
-                int result = scanner.scanImage(barcode);
-                
-                if (result != 0) {
-                    SymbolSet syms = scanner.getResults();
-                    
-                    if ( syms == null ) return;
-                    
-                    // Getting first result
-                    String scanResultString = null;
-                    
-                    for (Symbol sym : syms) {
-                        scanResultString = sym.getData();
-                    }
-                    
-                    if ( scanResultString == null || scanResultString.length() == 0 ) return;
-                    
-                    // Lets try to parse positive number or 0
-                    
-                    int resultNumber = -1;
-                    
-                    try {
-                    	resultNumber = Integer.parseInt(scanResultString);
-                    } catch(Exception e) {
-                    	// Bad result
-                    	return;
-                    }
-                    
-                    // If we get this far, we have a number, negative number is bad :d
-                    if ( resultNumber < 0 ) return;
-                    
-                    // We have a valid result, lets finish this Activity, and send back result
-                    barcodeScanned = true;
-                    previewing = false;
-                    mCamera.setPreviewCallback(null);
-                    mCamera.stopPreview();
-                    
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_SCANNED_CODE, resultNumber);
-                    
-                    QrActivity.this.setResult(RESULT_SCAN_SUCCESSFUL, intent);
-                    QrActivity.this.finish();
-                }
-            }
-        };
+			int result = scanner.scanImage(barcode);
+
+			if (result != 0) {
+				SymbolSet syms = scanner.getResults();
+
+				if (syms == null)
+					return;
+
+				// Getting first result
+				String scanResultString = null;
+
+				for (Symbol sym : syms) {
+					scanResultString = sym.getData();
+				}
+
+				if (scanResultString == null || scanResultString.length() == 0)
+					return;
+
+				// Check for settings code
+				if (settingsCode.equals(scanResultString)) {
+					Intent intent = new Intent(QrActivity.this,
+							SettingsActivity.class);
+					QrActivity.this.startActivity(intent);
+					
+					endScanningAndFinish();
+				}
+
+				// Lets try to parse positive number or 0
+
+				int resultNumber = -1;
+
+				try {
+					resultNumber = Integer.parseInt(scanResultString);
+				} catch (Exception e) {
+					// Bad result
+					return;
+				}
+
+				// If we get this far, we have a number, negative number is bad
+				// :d
+				if (resultNumber < 0)
+					return;
+
+				// We have a valid result, lets finish this Activity, and send
+				// back result
+				endScanning();
+
+				Intent intent = new Intent();
+				intent.putExtra(EXTRA_SCANNED_CODE, resultNumber);
+
+				QrActivity.this.setResult(RESULT_SCAN_SUCCESSFUL, intent);
+				QrActivity.this.finish();
+			}
+		}
+	};
 
     // Mimic continuous auto-focusing
-    AutoFocusCallback autoFocusCB = new AutoFocusCallback() {
-            public void onAutoFocus(boolean success, Camera camera) {
-                autoFocusHandler.postDelayed(doAutoFocus, 1000);
-            }
-        };
+	AutoFocusCallback autoFocusCB = new AutoFocusCallback() {
+		public void onAutoFocus(boolean success, Camera camera) {
+			autoFocusHandler.postDelayed(doAutoFocus, 1000);
+		}
+	};
+	
+	private void endScanning() {
+		barcodeScanned = true;
+		previewing = false;
+		if ( mCamera != null ) {
+			mCamera.setPreviewCallback(null);
+			mCamera.stopPreview();
+		}
+	}
+	
+	private void endScanningAndFinish() {
+		endScanning();
+		finish();
+	}
 }

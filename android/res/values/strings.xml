@@ -5,6 +5,8 @@
     <string name="settings">Beállítások</string>
     <string name="btn_qr_code">QR kód</string>
     <string name="server_url">Szerver URL</string>
+    <string name="service_url">Szolgáltatás URL</string>
+    <string name="example">Példa:</string>
     <string name="btn_save">Mentés</string>
     <string name="btn_default">Alapértelmezett</string>
     <string name="qr_help">Irányítsd a kamerát egy QR kód felé!</string>

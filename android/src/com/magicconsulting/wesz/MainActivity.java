@@ -16,22 +16,25 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	
 	private Button mBtnQR;
-	private Button mBtnSettings;
 	private WebView mWebView;
 	
-	public static final String DEFAULT_URL = "http://rabszolga.net16.net/wesz/";
-	private static final String SERVICE_URL_PART = "index.php?page=apply&serviceid=";
+	public static final String DEFAULT_BASE_URL = "http://weszfrontend.jelastic.dogado.eu/";
+	public static final String DEFAULT_SERVICE_URL_PART = "index.php?page=apply&serviceid=";
 	
-	public static final String PREF_KEY_URL = "key_url";
+	public static final String PREF_KEY_BASE_URL = "key_base_url";
+	public static final String PREF_KEY_SERVICE_URL_PART = "key_service_url_part";
 	
 	public static final int REQUEST_QR_CODE = 9999;
 	
-	private String mServerUrl;
+	private String mBaseUrl;
+	private String mServiceUrlPart;
+	
+	private String mLoadedUrl;
 	
 	private SharedPreferences mPref;
 	
 	private String getServiceUrl(int id) {
-		return mServerUrl + SERVICE_URL_PART + id; 
+		return mBaseUrl + mServiceUrlPart + id; 
 	}
 
 	@Override
@@ -41,20 +44,28 @@ public class MainActivity extends Activity {
 		
 		mPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
-		mServerUrl = mPref.getString(PREF_KEY_URL, DEFAULT_URL);
+		mBaseUrl = mPref.getString(PREF_KEY_BASE_URL, DEFAULT_BASE_URL);
+		mServiceUrlPart = mPref.getString(PREF_KEY_SERVICE_URL_PART, DEFAULT_SERVICE_URL_PART);
 		
 		mWebView = (WebView) findViewById(R.id.webview);
 		mBtnQR = (Button) findViewById(R.id.btn_qr);
-		mBtnSettings = (Button) findViewById(R.id.btn_settings);
 		
 		WebSettings settings = mWebView.getSettings();
 		settings.setJavaScriptEnabled(true);
 		settings.setSupportZoom(false);
 		settings.setBuiltInZoomControls(false);
 		
-		mWebView.setWebViewClient(new WebViewClient());
+		WebViewClient client = new WebViewClient() {
+			@Override
+			public void onLoadResource(WebView view, String url) {
+				if ( url != null ) mLoadedUrl = url;
+				super.onLoadResource(view, url);
+			}
+		};
 		
-		mWebView.loadUrl(mServerUrl);
+		mWebView.setWebViewClient(client);
+		
+		mWebView.loadUrl(mBaseUrl);
 		
 		mBtnQR.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -64,26 +75,31 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		mBtnSettings.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-				startActivity(intent);
-			}
-		});
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
-		String newUrl = mPref.getString(PREF_KEY_URL, DEFAULT_URL);
-		if ( !newUrl.equals(mServerUrl) ) {
-			mServerUrl = newUrl;
-			if ( mWebView != null ) {
-				mWebView.loadUrl(newUrl);
-			}
+		boolean needReload = false;
+		
+		String newBaseUrl = mPref.getString(PREF_KEY_BASE_URL, DEFAULT_BASE_URL);
+		String newServiceUrlPart = mPref.getString(PREF_KEY_SERVICE_URL_PART, DEFAULT_SERVICE_URL_PART);
+		
+		if ( !newBaseUrl.equals(mBaseUrl) ) {
+			mBaseUrl = newBaseUrl;
+			needReload = true;
 		}
+		
+		if ( !newServiceUrlPart.equals(newServiceUrlPart) ) {
+			mServiceUrlPart = newServiceUrlPart;
+			needReload = true;
+		}
+		
+		if ( needReload && mWebView != null ) {
+			mWebView.loadUrl(newBaseUrl);
+		}
+		
 	}
 	
 	@Override
@@ -110,6 +126,14 @@ public class MainActivity extends Activity {
 		
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-
+	
+	@Override
+	public void onBackPressed() {
+		if ( mBaseUrl.equals(mLoadedUrl) || !mWebView.canGoBack() ) {
+			super.onBackPressed();
+		} else {
+			if ( mWebView != null ) mWebView.goBack();
+		}
+	}
 
 }
